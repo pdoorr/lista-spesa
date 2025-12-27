@@ -1,0 +1,8 @@
+{
+  "appId": "com.listaspesa.app",
+  "appName": "Lista Spesa",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  }
+}
