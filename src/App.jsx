@@ -22,6 +22,9 @@ function App() {
   const [showSupermarketModal, setShowSupermarketModal] = useState(false);
   const [draggedItem, setDraggedItem] = useState(null);
   const fileInputRef = useRef(null);
+  const itemListRef = useRef(null);
+  const scrollIntervalRef = useRef(null);
+  const [mouseY, setMouseY] = useState(0);
 
   const [supermarkets, setSupermarkets] = useState([]);
   const [showAddSupermarketModal, setShowAddSupermarketModal] = useState(false);
@@ -179,6 +182,12 @@ function App() {
     setDraggedItem(index);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', e.target.innerHTML);
+
+    // Aggiungi listener per il movimento del mouse
+    document.addEventListener('mousemove', handleMouseMove);
+
+    // Avvia l'auto-scroll
+    startAutoScroll();
   }
 
   function handleDragOver(e) {
@@ -202,7 +211,61 @@ function App() {
 
   function handleDragEnd() {
     setDraggedItem(null);
+    stopAutoScroll();
+    // Rimuovi il listener del mouse
+    document.removeEventListener('mousemove', handleMouseMove);
   }
+
+  function handleMouseMove(e) {
+    setMouseY(e.clientY);
+  }
+
+  // Funzioni per l'auto-scroll durante il drag
+  function startAutoScroll() {
+    if (scrollIntervalRef.current) {
+      clearInterval(scrollIntervalRef.current);
+    }
+
+    scrollIntervalRef.current = setInterval(() => {
+      const scrollContainer = itemListRef.current;
+      if (!scrollContainer) return;
+
+      // Calcola la distanza dai bordi
+      const viewportHeight = window.innerHeight;
+      const currentMouseY = mouseY;
+
+      // Margini di trigger per lo scroll (in pixel)
+      const scrollMargin = 100;
+
+      // Scroll in alto se siamo vicini al bordo superiore
+      if (currentMouseY < scrollMargin && scrollContainer.scrollTop > 0) {
+        scrollContainer.scrollTop -= 15;
+      }
+
+      // Scroll in basso se siamo vicini al bordo inferiore
+      if (currentMouseY > viewportHeight - scrollMargin) {
+        const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+        if (scrollContainer.scrollTop < maxScroll) {
+          scrollContainer.scrollTop += 15;
+        }
+      }
+    }, 16); // Aggiorna ogni ~60fps
+  }
+
+  function stopAutoScroll() {
+    if (scrollIntervalRef.current) {
+      clearInterval(scrollIntervalRef.current);
+      scrollIntervalRef.current = null;
+    }
+  }
+
+  // Pulisci l'intervallo e i listener quando il componente viene smontato
+  useEffect(() => {
+    return () => {
+      stopAutoScroll();
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   // Salva l'ordine della lista per il supermercato selezionato
   async function saveOrder(itemsList) {
@@ -468,13 +531,6 @@ function App() {
             <section className="section">
               <div className="section-header">
                 <h2>Da comprare ({items.length})</h2>
-                <button 
-                  className="btn btn-primary"
-                  onClick={() => setShowAddForm(true)}
-                >
-                  <Plus size={18} />
-                  Aggiungi
-                </button>
               </div>
 
               {items.length === 0 ? (
@@ -482,9 +538,6 @@ function App() {
                   <ShoppingCart size={48} />
                   <p>La lista è vuota</p>
                   <div className="empty-actions">
-                    <button className="btn btn-primary" onClick={() => setShowAddForm(true)}>
-                      Aggiungi il primo prodotto
-                    </button>
                     {history.length > 0 && (
                       <button className="btn btn-secondary" onClick={generateListFromHistory}>
                         <Sparkles size={18} />
@@ -494,7 +547,7 @@ function App() {
                   </div>
                 </div>
               ) : (
-                <ul className="item-list">
+                <ul className="item-list" ref={itemListRef}>
                   {items.map((item, index) => (
                     <li 
                       key={item.id} 
@@ -765,6 +818,15 @@ function App() {
           </section>
         )}
       </main>
+
+      {/* Floating Add Button */}
+      <button
+        className="floating-add-btn"
+        onClick={() => setShowAddForm(true)}
+        title="Aggiungi prodotto"
+      >
+        <Plus size={28} />
+      </button>
 
       {/* Form aggiungi item */}
       {showAddForm && (

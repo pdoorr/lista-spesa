@@ -170,3 +170,4 @@ Ricorda: `versionCode` deve essere sempre incrementato per ogni release.
 - [Guida firma app Android](https://developer.android.com/studio/publish/app-signing)
 - [Google Play Console](https://play.google.com/console)
 
+
