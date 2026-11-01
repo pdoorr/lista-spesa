@@ -1,119 +1,87 @@
-# 🛒 Lista Spesa PWA
+# 🛒 Lista Spesa
 
-Applicazione web progressiva (PWA) per la gestione della lista della spesa che funziona completamente offline.
+App Android (Capacitor) e PWA per la lista della spesa: funziona completamente offline,
+impara le tue abitudini e segue il percorso del tuo supermercato.
 
-## ✨ Caratteristiche
+## ✨ Funzionalità
 
-- **✅ Funziona Offline**: Tutti i dati sono salvati localmente con IndexedDB
-- **📱 Installabile**: Può essere installata come app nativa su Android/iOS
-- **📋 Gestione Lista**: Aggiungi, modifica, elimina e marca prodotti come comprati
-- **🔢 Quantità**: Gestione quantità per ogni prodotto con controlli rapidi
-- **📊 Storico**: Visualizza lo storico degli acquisti
-- **💡 Suggerimenti**: Suggerimenti intelligenti basati sulla frequenza di acquisto
-- **🪄 Generazione Automatica**: Crea automaticamente la lista dallo storico acquisti
-- **💾 Backup**: Esporta i dati in JSON per backup o caricamento su Google Drive
-- **📥 Ripristino**: Importa dati da file JSON per ripristinare il backup
-- **🎨 UI Moderna**: Interfaccia pulita e responsive
+### Lista
+- **Inserimento rapido intelligente**: scrivi “2 kg mele”, “latte x3”, “500 g farina”: quantità e unità vengono riconosciute da sole
+- **Completamento automatico** dal catalogo dei prodotti già usati, con preferiti ⭐ e prodotti frequenti a portata di tocco
+- **Reparti automatici** (frutta e verdura, latticini, dispensa, surgelati, casa…) riconosciuti dal nome; le correzioni vengono ricordate
+- **Unità di misura**: pz, conf, kg, g, l, ml con passi adatti (+1 pz, +0,5 kg, +100 g…)
+- **Gesti**: scorri a destra per spuntare, a sinistra per eliminare, con **Annulla**
+- **Note e prezzi** per ogni articolo, con **stima del totale** e prezzo proposto dall’ultimo acquisto
+- **Duplicati uniti**: aggiungere un prodotto già in lista ne aumenta la quantità
+- **Termina spesa**: gli articoli presi diventano una spesa nello storico (totale, negozio, numero articoli)
+- **Condividi** la lista (WhatsApp, Telegram, email…) e **incolla** una lista ricevuta in chat
+- **Schermo sempre acceso** mentre fai la spesa (opzionale)
 
-## 🚀 Installazione
-
-### Prerequisiti
-- Node.js 18+ 
-- npm o yarn
-
-### Setup
-
-```bash
-# Installa le dipendenze
-npm install
-
-# Avvia in sviluppo
-npm run dev
-
-# Build per produzione
-npm run build
-
-# Anteprima build
-npm run preview
-```
-
-## 📱 Installazione su Android
-
-1. Apri l'app nel browser Chrome su Android
-2. Vai a `http://localhost:5173` (o il tuo URL di produzione)
-3. Tocca il menu (⋮) in alto a destra
-4. Seleziona "Aggiungi alla schermata Home" o "Installa app"
-
-## 🗄️ Struttura del Database
-
-L'app usa **IndexedDB** (tramite Dexie.js) con le seguenti tabelle:
-
-### `items`
-Prodotti nella lista corrente
-- `id`: ID univoco
-- `name`: Nome del prodotto
-- `quantity`: Quantità
-- `completed`: Stato (0/1)
-- `createdAt`: Data creazione
-- `updatedAt`: Data ultima modifica
-
-### `history`
-Storico acquisti
-- `id`: ID univoco
-- `itemName`: Nome prodotto
-- `quantity`: Quantità
-- `purchasedAt`: Data acquisto
-
-### `suggestions`
-Suggerimenti prodotti
-- `id`: ID univoco
-- `name`: Nome prodotto
-- `frequency`: Numero di acquisti
-- `lastUsed`: Data ultimo uso
-
-## 🎯 Funzionalità
-
-### Gestione Lista
-- Aggiungi prodotti con nome e quantità
-- Marca prodotti come comprati (vengono salvati nello storico)
-- Elimina prodotti dalla lista
-- Ripristina prodotti dalla lista completati
-
-### Generazione Automatica
-Cliccando sull'icona ✨ (Sparkles) puoi generare automaticamente una lista della spesa basata sullo storico:
-- I prodotti sono ordinati per frequenza di acquisto
-- La quantità suggerita è la media delle quantità acquistate
-- Puoi rivedere la lista prima di confermare
-
-### Backup e Ripristino
-**Esporta Dati:**
-- Clicca "Esporta" nella sezione Storico
-- Scarica un file JSON con tutti i tuoi dati (lista, storico, suggerimenti)
-- Puoi caricare questo file su Google Drive o altri servizi cloud per backup
-
-**Importa Dati:**
-- Clicca "Importa" nella sezione Storico
-- Seleziona un file JSON di backup precedentemente esportato
-- Tutti i dati attuali verranno sostituiti con quelli del file
+### Supermercati
+- Scegli il negozio: la lista si ordina secondo **il percorso dei reparti**
+- L’ordine dei reparti si **trascina** a piacere oppure viene **appreso** dall’ordine in cui spunti gli articoli in quel negozio
+- Il negozio scelto viene ricordato
 
 ### Suggerimenti
-I prodotti che compri più spesso appaiono nei suggerimenti:
-- Ordinati per frequenza di acquisto
-- Clicca per aggiungerli rapidamente alla lista
+- **“Forse ti serve”**: l’app calcola ogni quanto compri un prodotto e te lo propone quando sta per finire
+- **Genera dallo storico**: proposta di lista ordinata per urgenza, con preselezione e quantità modificabili
 
-### Storico
-- Registro automatico di ogni acquisto
-- Visualizzazione cronologica con data e ora
-- Base per la generazione automatica della lista
+### Storico e statistiche
+- Cronologia per giorno con totale speso e negozi, ricerca, eliminazione di singole voci (con annulla), riaggiunta in lista
+- Catalogo prodotti con frequenza d’acquisto, ultimo prezzo, reparto e preferiti
+- Statistiche: spesa del mese (confrontata con lo stesso periodo del mese scorso), spesa media, spesa mensile, prodotti più acquistati, spesa per reparto
 
-## 🛠️ Tecnologie
+### App
+- Nuovo design (Material 3), **tema chiaro/scuro/di sistema** e 6 colori d’accento
+- Navigazione a schede in basso, fogli a comparsa, vibrazione al tocco
+- **Tasto indietro di Android** gestito (chiude i pannelli, poi torna alla lista, poi esce con doppio tocco)
+- Bordo-a-bordo su Android 15+ con aree sicure corrette
+- **Backup** su Google Drive/File tramite il pannello di condivisione, **importazione** con anteprima e scelta tra *unisci* e *sostituisci* (compatibile con i backup della versione 1)
+- Nuova icona e splash screen (anche in versione scura)
 
-- **React 18** - Framework UI
-- **Vite** - Build tool e dev server
-- **Dexie.js** - Wrapper per IndexedDB
-- **Lucide React** - Icone
-- **Vite PWA Plugin** - Service worker e manifest
-- **Capacitor** - Incapsulamento in app nativa
+## 🚀 Sviluppo
+
+```bash
+npm install      # dipendenze
+npm run dev      # server di sviluppo
+npm test         # test (parser, reparti, previsioni, database e migrazione)
+npm run lint     # controllo del codice
+npm run build    # build di produzione
+```
+
+## 🗂️ Struttura
+
+```
+src/
+  App.jsx               shell: tema, navigazione, tasto indietro
+  db.js                 schema IndexedDB (Dexie), migrazioni, azioni, backup
+  lib/
+    categories.js       reparti e riconoscimento automatico
+    parse.js            interpretazione di “2 kg mele” e di liste incollate
+    units.js            unità, passi, formattazione, stima prezzi
+    predict.js          frequenze e prodotti in esaurimento
+    order.js            ordinamento per reparto/percorso del negozio
+    native.js           Capacitor: vibrazione, condivisione, file, schermo acceso
+    theme.js            tema e colori d’accento
+  components/           riga con gesti, inserimento rapido, editor, fogli, UI di base
+  views/                Lista, Storico, Statistiche, Impostazioni
+```
+
+## 🗄️ Database (IndexedDB, versione 5)
+
+| Tabella | Contenuto |
+|---|---|
+| `items` | articoli in lista: nome, quantità, unità, reparto, nota, prezzo, stato |
+| `history` | ogni acquisto: prodotto, quantità, unità, prezzo, negozio, spesa di appartenenza |
+| `products` | catalogo: reparto e unità ricordati, ultimo prezzo/quantità, conteggio, preferito |
+| `supermarkets` | negozi e ordine personalizzato dei reparti |
+| `storeRanks` | percorso appreso: posizione tipica di ogni prodotto in ogni negozio |
+| `trips` | spese concluse: data, negozio, totale, numero articoli |
+| `settings` | preferenze (tema, colore, opzioni, negozio scelto) |
+
+I dati della versione precedente vengono migrati automaticamente al primo avvio:
+reparti assegnati, suggerimenti trasformati in catalogo, ordine manuale per supermercato
+convertito in percorso appreso.
 
 ## 🤖 Creare APK Android Release
 

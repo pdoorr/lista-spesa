@@ -1,6 +1,6 @@
 {
   "name": "lista-spesa-pwa",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "PWA per la gestione della lista della spesa offline",
   "type": "module",
   "scripts": {
@@ -10,12 +10,18 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "android:sync": "npx cap sync android",
     "android:open": "npx cap open android",
-    "android:release": "powershell -ExecutionPolicy Bypass -File build-release-apk.ps1"
+    "android:release": "powershell -ExecutionPolicy Bypass -File build-release-apk.ps1",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@capacitor-community/keep-awake": "^8.0.1",
     "@capacitor/android": "^8.0.0",
+    "@capacitor/app": "^8.1.2",
     "@capacitor/cli": "^8.0.0",
     "@capacitor/core": "^8.0.0",
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/share": "^8.0.3",
     "@hello-pangea/dnd": "^18.0.1",
     "date-fns": "^2.30.0",
     "dexie": "^3.2.4",
@@ -32,7 +38,9 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "fake-indexeddb": "^6.2.7",
     "vite": "^5.0.8",
-    "vite-plugin-pwa": "^0.17.4"
+    "vite-plugin-pwa": "^0.17.4",
+    "vitest": "^2.1.9"
   }
 }
